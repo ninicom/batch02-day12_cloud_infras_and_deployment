@@ -38,6 +38,23 @@ app.add_middleware(
 app.include_router(router, prefix="/api/v1")
 
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi import HTTPException
+import os
+
 @app.get("/health")
 async def health():
     return {"status": "ok", "env": settings.app_env}
+
+# Serve frontend static files
+frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "src", "frontend", "dist")
+if os.path.isdir(frontend_dir):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dir, "assets")), name="assets")
+    
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Serve index.html for all non-API paths to support client-side routing
+        if not full_path.startswith("api/"):
+            return FileResponse(os.path.join(frontend_dir, "index.html"))
+        raise HTTPException(status_code=404, detail="Not Found")

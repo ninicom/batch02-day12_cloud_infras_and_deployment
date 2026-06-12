@@ -139,7 +139,10 @@ export function ChatWidget({ lang, sessionId, theme = "light" }: ChatWidgetProps
     try {
       const res = await fetch("/api/v1/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-API-Key": "secret-key-123"
+        },
         body: JSON.stringify({ message: text, session_id: sessionId }),
       });
       
@@ -161,7 +164,10 @@ export function ChatWidget({ lang, sessionId, theme = "light" }: ChatWidgetProps
       try {
         await fetch("/api/v1/log", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "X-API-Key": "secret-key-123"
+          },
           body: JSON.stringify({
             level: "error",
             component: "frontend.chat",
