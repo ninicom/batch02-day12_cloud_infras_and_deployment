@@ -12,8 +12,8 @@ services:
   - type: web
     name: ai-agent
     runtime: docker
-    dockerfilePath: my-production-agent/Dockerfile
-    dockerContext: my-production-agent
+    dockerfilePath: 06-lab-complete/Dockerfile
+    dockerContext: 06-lab-complete
     region: singapore         # Chọn region gần user nhất
     plan: free                # free | starter | standard | pro
 
