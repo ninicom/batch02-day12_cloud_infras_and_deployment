@@ -11,6 +11,14 @@
 
 
 ###  Exercise 3.2: Deploy Render
+- **Public URL được cấp phát bởi Render:**  
+  https://ai-agent-3l8d.onrender.com/
+
+- **Kết quả gọi API `/ask` trên domain public:**
+```json
+{"answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận."}
+```
+
 - **So sánh `render.yaml` và `railway.toml`:**
   - File `render.yaml` có định dạng và mục đích gì?  
     Là file cấu hình (Infrastructure as Code) chuẩn của Render. Nó dùng để định nghĩa đồng thời nhiều tài nguyên (Web Service, Background worker, Redis, PostgreSQL...) trong cùng một hệ thống. Nó kiểm soát toàn bộ vòng đời: từ cấu hình runtime (python), cấu hình lệnh (build/start), biến môi trường cho tới tích hợp tự động deploy (CI/CD) khi push code lên GitHub.
@@ -33,7 +41,7 @@
 ##  Xác nhận Checkpoint 3
 Hãy tích chọn các mục bạn đã hoàn thành và hiểu rõ:
 
-- [ ] Deploy thành công lên ít nhất 1 platform (Railway hoặc Render).
-- [ ] Có public URL hoạt động thực tế.
-- [ ] Hiểu cách set environment variables trên cloud dashboard.
-- [ ] Biết cách xem live logs trên dashboard của Cloud platform.
+- [x] Deploy thành công lên ít nhất 1 platform (Railway hoặc Render).
+- [x] Có public URL hoạt động thực tế.
+- [x] Hiểu cách set environment variables trên cloud dashboard.
+- [x] Biết cách xem live logs trên dashboard của Cloud platform.
