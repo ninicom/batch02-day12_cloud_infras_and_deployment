@@ -1,8 +1,8 @@
-name: CI/CD Pipeline
+name: Continuous Integration (CI)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "**" ]
   pull_request:
     branches: [ "main" ]
 
@@ -41,21 +41,4 @@ jobs:
     - name: Build Docker Image
       run: |
         cd 06-lab-complete
-        docker build -t ai-agent:test .
-
-  deploy:
-    needs: build-docker
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-    - name: Trigger Render Deploy Hook
-      env:
-        DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-      run: |
-        if [ ! -z "$DEPLOY_HOOK" ]; then
-          curl -X POST $DEPLOY_HOOK
-          echo "Deploy triggered successfully!"
-        else
-          echo "RENDER_DEPLOY_HOOK_URL secret is not set, skipping manual deploy trigger."
-          echo "Note: Render might auto-deploy based on branch settings."
-        fi
+        docker build -t ai-agent:ci-test .
