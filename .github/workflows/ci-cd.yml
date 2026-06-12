@@ -1,0 +1,61 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r 06-lab-complete/requirements.txt
+        pip install pytest httpx
+        
+    - name: Run Tests
+      env:
+        AGENT_API_KEY: "test-secret"
+        REDIS_URL: "redis://localhost:6379/0"
+        OPENAI_API_KEY: "fake-key-for-testing"
+      run: |
+        cd 06-lab-complete
+        PYTHONPATH=. pytest tests/
+
+  build-docker:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker Image
+      run: |
+        cd 06-lab-complete
+        docker build -t ai-agent:test .
+
+  deploy:
+    needs: build-docker
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Trigger Render Deploy Hook
+      env:
+        DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      run: |
+        if [ ! -z "$DEPLOY_HOOK" ]; then
+          curl -X POST $DEPLOY_HOOK
+          echo "Deploy triggered successfully!"
+        else
+          echo "RENDER_DEPLOY_HOOK_URL secret is not set, skipping manual deploy trigger."
+          echo "Note: Render might auto-deploy based on branch settings."
+        fi

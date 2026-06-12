@@ -20,6 +20,12 @@ class Settings(BaseSettings):
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     cors_origins: str = "http://localhost:3000"
 
+    # Infrastructure & Security
+    redis_url: str = "redis://localhost:6379/0"
+    agent_api_key: str = "secret-key-123"
+    rate_limit_per_minute: int = 10
+    monthly_budget_usd: float = 10.0
+
     # LLM
     openai_api_key: str = ""
     model_name: str = "gpt-4o-mini"
